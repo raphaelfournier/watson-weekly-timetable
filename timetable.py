@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # Set Axis
     ax.yaxis.grid()
     ax.set_xlim(0.5,len(days)+0.5)
-    ax.set_ylim(float(config._sections['output']['starthour']),float(config._sections['output']['endhour']))
+    ax.set_ylim(float(config._sections['output']['endhour']),float(config._sections['output']['starthour']))
     ax.set_xticks(range(1,len(days)+1))
     ax.set_xticklabels(days)
     ax.set_ylabel('')
