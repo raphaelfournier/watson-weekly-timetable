@@ -50,8 +50,10 @@ if __name__ == "__main__":
 
     frames = []
 
-    title = config._sections['output']['pngfile']
-    colors = config._sections['colors']
+    title     = config._sections['output']['pngfile']
+    colors    = config._sections['colors']
+    starthour = float(config._sections['output']['starthour'])
+    endhour   = float(config._sections['output']['endhour'])
 
     fig=plt.figure(figsize=(10,5.89))
     ax=fig.add_subplot(111)
@@ -85,27 +87,28 @@ if __name__ == "__main__":
         blockcolor = get_color(frame["tags"],colors)
 
         if end-begin > 0.3:
-            if jour < 5:
-                # plot event
-                rect = patches.Rectangle((jour,begin),0.96,end-begin,linewidth=0.5,edgecolor='grey',facecolor=blockcolor)
-                ax.add_patch(rect)
-                # plot beginning time
-                plt.text(jour+0.02, begin+0.05 ,'{0}:{1:0>2}'.format(int(hour),int(minute)), ha='left',va='top', fontsize=5)
-                # plot event name
-                plt.text(jour+0.5, begin+0.1, event[:15], ha='center', va='top', fontsize=5, wrap=True)
-            else:
-                rect = patches.Rectangle((jour+0.48,begin),0.48,end-begin,linewidth=0.5,edgecolor='grey',facecolor=blockcolor)
-                ax.add_patch(rect)
-                # plot beginning time
-                plt.text(jour+0.52, begin+0.05 ,'{0}:{1:0>2}'.format(int(hour),int(minute)), ha='left',va='top', fontsize=5)
-                # plot event name
-                plt.text(jour+0.5, begin+0.25, event[:15], ha='left', va='top', fontsize=5, wrap=True)
+            if end < endhour:
+                if jour < 5:
+                    # plot event
+                    rect = patches.Rectangle((jour,begin),0.96,end-begin,linewidth=0.5,edgecolor='grey',facecolor=blockcolor)
+                    ax.add_patch(rect)
+                    # plot beginning time
+                    plt.text(jour+0.02, begin+0.05 ,'{0}:{1:0>2}'.format(int(hour),int(minute)), ha='left',va='top', fontsize=5)
+                    # plot event name
+                    plt.text(jour+0.5, begin+0.1, event[:15], ha='center', va='top', fontsize=5, wrap=True)
+                else:
+                    rect = patches.Rectangle((jour+0.48,begin),0.48,end-begin,linewidth=0.5,edgecolor='grey',facecolor=blockcolor)
+                    ax.add_patch(rect)
+                    # plot beginning time
+                    plt.text(jour+0.52, begin+0.05 ,'{0}:{1:0>2}'.format(int(hour),int(minute)), ha='left',va='top', fontsize=5)
+                    # plot event name
+                    plt.text(jour+0.5, begin+0.25, event[:15], ha='left', va='top', fontsize=5, wrap=True)
 
 
     # Set Axis
     ax.yaxis.grid()
     ax.set_xlim(0.5,len(days)+0.5)
-    ax.set_ylim(float(config._sections['output']['endhour']),float(config._sections['output']['starthour']))
+    ax.set_ylim(endhour,starthour)
     ax.set_xticks(range(1,len(days)+1))
     ax.set_xticklabels(days)
     ax.set_ylabel('')
